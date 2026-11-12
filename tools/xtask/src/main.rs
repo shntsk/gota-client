@@ -16,7 +16,14 @@ const STEPS: &[Step] = &[
     },
     Step {
         name: "cargo clippy -D warnings",
-        args: &["clippy", "--workspace", "--all-targets", "--", "-D", "warnings"],
+        args: &[
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings",
+        ],
     },
     Step {
         name: "cargo test",
