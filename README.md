@@ -1,40 +1,59 @@
-# Gota
+<p align="center">
+  <strong><a href="https://github.com/shntsk/gota-client">Gota</a></strong>
+  <br>
+  A native desktop client for Fluxer.
+</p>
 
-Cliente nativo, **independente e não oficial**, para o [Fluxer](https://fluxer.com).
-Escrito em Rust com [Slint](https://slint.dev). Sem Electron, Tauri ou WebView.
+<p align="center">
+  <a href="https://github.com/shntsk/gota-client/actions/workflows/ci.yml">
+    <img src="https://github.com/shntsk/gota-client/actions/workflows/ci.yml/badge.svg" alt="CI status">
+  </a>
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/badge/license-GPL--3.0--only-blue.svg" alt="GPL-3.0-only license">
+  </a>
+  <img src="https://img.shields.io/badge/language-Rust-orange.svg" alt="Rust">
+  <img src="https://img.shields.io/badge/UI-Slint-7B68EE.svg" alt="Slint">
+</p>
 
-> O Gota não é afiliado ao Fluxer e não usa a logo, os ícones nem os assets dele.
-> O nome visual "Gota" é provisório.
+Gota is an independent, open-source client for [Fluxer](https://fluxer.com), built with **Rust** and **Slint**. The project targets Linux and Windows desktop, with Android support planned.
 
-**Plataformas:** Windows x86_64, Linux x86_64 e (futuramente) Android arm64-v8a.
-**Licença:** GPL-3.0-only (`LICENSE`). **Política de uso do Fluxer:** `docs/policy.md`.
+> Gota is an unofficial third-party project. It is not affiliated with, endorsed by, or sponsored by Fluxer.
 
-## Estado
+## Status
 
-Estágio 1a: fundação desktop. O app apenas abre uma janela Slint mínima. Ainda não há
-login, mensagens, rede nem Android. Veja `docs/architecture.md`.
+Gota is in early development. The current codebase contains the initial Rust workspace and a minimal Slint desktop application. Fluxer integration and the Android application are not implemented yet.
 
-## Requisitos
+| Platform | Status | Architecture |
+| --- | --- | --- |
+| Linux | Initial desktop application | x86_64 |
+| Windows | Initial desktop application | x86_64 |
+| Android | Planned | arm64-v8a |
 
-- Rust estável (instalado via [rustup](https://rustup.rs); o `rust-toolchain.toml` cuida do resto).
-- Linux: pacotes de desenvolvimento de fontconfig, xkbcommon, Wayland/X11 e OpenGL/EGL.
-  Em Debian/Ubuntu:
-  `sudo apt install pkg-config libfontconfig1-dev libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev libx11-dev libxcb1-dev libgl1-mesa-dev libegl1-mesa-dev`
-- Windows: toolchain MSVC (Visual Studio Build Tools).
-- Opcional: `cargo install cargo-deny --locked`.
+## Build
 
-## Comandos
+Install the Rust toolchain specified in [`rust-toolchain.toml`](./rust-toolchain.toml), then run the desktop application:
 
 ```sh
-cargo run -p gota-desktop      # abre a janela (binário "gota")
-cargo xtask check              # fmt --check, clippy -D warnings, test e cargo deny check
-cargo xtask check --skip-deny  # o mesmo, sem o cargo-deny (usado no CI)
+cargo run -p gota-desktop
 ```
 
-Na primeira compilação o Cargo gera o `Cargo.lock`; faça commit dele (é um aplicativo).
+Run the project checks:
 
-## CI
+```sh
+cargo xtask check
+```
 
-`.github/workflows/ci.yml` roda em push, pull request e manualmente. Gera os artifacts
-`gota-linux-x86_64` (tar.gz) e `gota-windows-x86_64` (zip), retidos por 14 dias. São
-pacotes simples para teste, não instaladores.
+## Continuous integration
+
+GitHub Actions is configured to check and build the Linux and Windows desktop targets on pushes, pull requests, and manual runs.
+
+Successful runs publish development artifacts:
+
+- `gota-linux-x86_64` — `.tar.gz`
+- `gota-windows-x86_64` — `.zip`
+
+Download them from [GitHub Actions](https://github.com/shntsk/gota-client/actions). These packages are development builds, not release installers.
+
+## License
+
+Gota is licensed under the [GNU General Public License v3.0 only](./LICENSE). Third-party components and their licenses are listed in [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
