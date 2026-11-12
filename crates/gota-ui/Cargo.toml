@@ -1,0 +1,15 @@
+[package]
+name = "gota-ui"
+description = "Interface Slint compartilhada do Gota"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+build = "build.rs"
+
+[dependencies]
+slint.workspace = true
+
+[build-dependencies]
+slint-build.workspace = true

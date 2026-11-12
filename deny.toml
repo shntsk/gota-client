@@ -1,0 +1,50 @@
+# Configuração do cargo-deny para o Gota (GPL-3.0-only).
+# Execute com: cargo deny check
+
+[graph]
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc",
+    "aarch64-linux-android",
+]
+
+[advisories]
+version = 2
+yanked = "warn"
+ignore = []
+
+[licenses]
+version = 2
+confidence-threshold = 0.8
+unused-allowed-license = "allow"
+# Somente licenças compatíveis com GPL-3.0-only. Tudo que não estiver aqui é rejeitado,
+# incluindo GPL-2.0-only, licenças proprietárias e licenças "LicenseRef-*".
+# O Slint é licenciado como "GPL-3.0-only OR ...": a alternativa GPL-3.0-only é a usada.
+allow = [
+    "GPL-3.0-only",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "MIT",
+    "MIT-0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "0BSD",
+    "BSL-1.0",
+    "CC0-1.0",
+    "MPL-2.0",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+]
+
+[bans]
+multiple-versions = "warn"
+wildcards = "warn"
+allow-wildcard-paths = true
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

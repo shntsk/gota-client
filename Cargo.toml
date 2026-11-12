@@ -1,0 +1,19 @@
+[workspace]
+resolver = "2"
+members = ["apps/desktop", "crates/gota-ui", "tools/xtask"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-only"
+repository = "https://github.com/shntsk/gota-client"
+publish = false
+
+[workspace.dependencies]
+slint = "1.14"
+slint-build = "1.14"
+gota-ui = { path = "crates/gota-ui" }
+
+[profile.release]
+lto = "thin"
+strip = true

@@ -1,0 +1,15 @@
+[package]
+name = "gota-desktop"
+description = "Aplicativo desktop do Gota (Windows e Linux)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "gota"
+path = "src/main.rs"
+
+[dependencies]
+gota-ui.workspace = true

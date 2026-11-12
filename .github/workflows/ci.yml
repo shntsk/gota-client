@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  deny:
+    name: cargo-deny
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check
+
+  linux:
+    name: Linux x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar dependências do sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pkg-config libfontconfig1-dev libxkbcommon-dev libxkbcommon-x11-dev \
+            libwayland-dev libx11-dev libxcb1-dev libgl1-mesa-dev libegl1-mesa-dev
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: fmt, clippy e testes
+        run: cargo xtask check --skip-deny
+
+      - name: Compilar (release)
+        run: cargo build --release -p gota-desktop
+
+      - name: Empacotar
+        run: |
+          mkdir -p dist/gota-linux-x86_64
+          cp target/release/gota dist/gota-linux-x86_64/
+          cp LICENSE README.md THIRD_PARTY_NOTICES.md dist/gota-linux-x86_64/
+          tar -czf gota-linux-x86_64.tar.gz -C dist gota-linux-x86_64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gota-linux-x86_64
+          path: gota-linux-x86_64.tar.gz
+          retention-days: 14
+          if-no-files-found: error
+
+  windows:
+    name: Windows x86_64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: fmt, clippy e testes
+        run: cargo xtask check --skip-deny
+
+      - name: Compilar (release)
+        run: cargo build --release -p gota-desktop
+
+      - name: Empacotar
+        shell: pwsh
+        run: |
+          $dir = "dist/gota-windows-x86_64"
+          New-Item -ItemType Directory -Force -Path $dir | Out-Null
+          Copy-Item target/release/gota.exe $dir
+          Copy-Item LICENSE, README.md, THIRD_PARTY_NOTICES.md $dir
+          Compress-Archive -Path $dir -DestinationPath gota-windows-x86_64.zip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gota-windows-x86_64
+          path: gota-windows-x86_64.zip
+          retention-days: 14
+          if-no-files-found: error
