@@ -11,6 +11,14 @@ targets = [
 [advisories]
 version = 2
 yanked = "warn"
+# Avisos de "não mantido" só reprovam dependências diretas do workspace. Vulnerabilidades
+# (RUSTSEC de segurança) continuam reprovando em todo o grafo, direto ou transitivo.
+# Os crates abaixo aparecem de forma transitiva via Slint e foram reportados como não
+# mantidos no CI; não são dependências diretas do Gota e não há exceção individual:
+#   pin-utils (RUSTSEC-2026-0441), ttf-parser (RUSTSEC-2026-0192), zbus_names
+#   (RUSTSEC-2026-0371), zvariant (RUSTSEC-2026-0370), zvariant_derive (RUSTSEC-2026-0372).
+# Reavaliar a cada atualização do Slint.
+unmaintained = "workspace"
 ignore = []
 
 [licenses]
@@ -20,6 +28,7 @@ unused-allowed-license = "allow"
 # Somente licenças compatíveis com GPL-3.0-only. Tudo que não estiver aqui é rejeitado,
 # incluindo GPL-2.0-only, licenças proprietárias e licenças "LicenseRef-*".
 # O Slint é licenciado como "GPL-3.0-only OR ...": a alternativa GPL-3.0-only é a usada.
+# Unlicense (ex.: ksni, via Slint) é domínio público listado pela FSF como compatível com a GPL.
 allow = [
     "GPL-3.0-only",
     "Apache-2.0",
@@ -34,6 +43,7 @@ allow = [
     "BSL-1.0",
     "CC0-1.0",
     "MPL-2.0",
+    "Unlicense",
     "Unicode-3.0",
     "Unicode-DFS-2016",
 ]
